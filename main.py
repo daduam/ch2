@@ -1,6 +1,10 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
+import csv
+from os import path
 
 AMOUNT_PER_HOUR = 5
+CSV_FILENAME = "records.csv"
+CSV_FIELDNAMES = ["Date", "Start Time", "End Time", "Hours Spent", "Amount Earned"]
 
 
 def convert_input_time(str_time):
@@ -27,6 +31,20 @@ def calculate_amount(hours, rate=AMOUNT_PER_HOUR):
     return hours * rate
 
 
+def init_csvfile(filename=CSV_FILENAME):
+    """ creates csv record file and sets headers """
+    with open(filename, "w", newline="") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_FIELDNAMES)
+        writer.writeheader()
+
+
+def write_record(record, filename=CSV_FILENAME):
+    """ write an entry into csv record file """
+    with open("records.csv", "a", newline="") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_FIELDNAMES)
+        writer.writerow(record)
+
+
 def main():
     print("Time tracker")
     print("Enter times in the format 6pm or 6:30pm")
@@ -38,6 +56,17 @@ def main():
 
     hours = calculate_hours(start_time, end_time)
     amount_earned = calculate_amount(hours)
+
+    if not path.exists(CSV_FILENAME):
+        init_csvfile()
+    record = {
+        "Date": datetime.now(),
+        "Start Time": in_start_time.strip(),
+        "End Time": in_end_time.strip(),
+        "Hours Spent": hours,
+        "Amount Earned": amount_earned,
+    }
+    write_record(record)
 
     print("Amount earned: ${}".format(amount_earned))
 
