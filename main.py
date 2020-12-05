@@ -47,7 +47,7 @@ def write_record(record, filename=CSV_FILENAME):
 
 def main():
     print("Time tracker")
-    print("Enter times in the format 6pm or 6:30pm")
+    print("Enter times in the 12-hour format eg. 6pm or 6:30pm")
     in_start_time = input("Start time: ")
     in_end_time = input("End time: ")
 
@@ -68,7 +68,7 @@ def main():
     }
     write_record(record)
 
-    print("Amount earned: ${}".format(amount_earned))
+    print("Amount earned: ${:,.3f}".format(amount_earned))
 
 
 if __name__ == "__main__":
